@@ -13,21 +13,35 @@ export class ProductsController {
 
   @ApiOperation({ summary: 'Создание товара' })
   @ApiResponse({ status: 200, type: Products })
-  @Post('/add')
+  @Post()
   create(@Body() productDto: CreateProductCardsDto) {
     return this.productService.createProduct(productDto);
   }
 
   @ApiOperation({ summary: 'Получить все товары' })
   @ApiResponse({ status: 200, type: [Products] })
-  @Get('/all')
+  @Get()
   getAll() {
     return this.productService.getAllProducts();
   }
 
+  @ApiOperation({ summary: 'Получить все товары с изменной ценной' })
+  @ApiResponse({ status: 200, type: [Products] })
+  @Get('/discount')
+  getAllWithOldCost() {
+    return this.productService.getAllProductsWithOldCost();
+  }
+
+  @ApiOperation({ summary: 'Получить все товары с отметкой /новое/' })
+  @ApiResponse({ status: 200, type: [Products] })
+  @Get('/news')
+  getAllWithIconNew() {
+    return this.productService.getAllProductsWithIconNew();
+  }
+
   @ApiOperation({ summary: 'Изменить значение наличия товара на складе' })
   @Patch()
-  delete(@Body() dto: ChangeInStockProductDto) {
+  changeInStockProduct(@Body() dto: ChangeInStockProductDto) {
     return this.productService.changeInStock(dto);
   }
 }

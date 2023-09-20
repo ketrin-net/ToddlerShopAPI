@@ -1,15 +1,18 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
-import { ProductsModule } from "./products/products.module";
-import { Products } from "./products/products.model";
+import { UsersModule } from './modules/users/users.module';
+import { Products } from "./modules/products/products.model";
+import { ProductsModule } from "./modules/products/products.module";
+import { UsersService } from './users/users.service';
+import { UsersModule } from './users/users.module';
 
 @Module({
   controllers: [],
-  providers: [],
+  providers: [UsersService],
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.${process.env.NODE_ENV}.env`
+      envFilePath: `.env`,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -23,6 +26,7 @@ import { Products } from "./products/products.model";
       synchronize: true,
     }),
     ProductsModule,
+    UsersModule,
   ]
 })
 export class AppModule {}

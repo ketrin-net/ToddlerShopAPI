@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Products } from './products.model';
 import { CreateProductCardsDto } from './dto/create-product';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { ChangeInStockProductDto } from './dto/change-inStock-product';
 
 @Injectable()
@@ -21,7 +21,15 @@ export class ProductsService {
   }
 
   async getAllProducts(): Promise<Products[]> {
-    return await this.productsRepository.find();
+    return await this.productsRepository.find()
+  }
+
+  async getAllProductsWithIconNew(): Promise<Products[]> {
+    return await this.productsRepository.find({ where: { iconNew: true } })
+  }
+
+  async getAllProductsWithOldCost(): Promise<Products[]> {
+    return await this.productsRepository.find({ where: { oldCost: Not(IsNull()) } });
   }
 
   async changeInStock(dto: ChangeInStockProductDto) {
@@ -30,8 +38,10 @@ export class ProductsService {
         id: dto.productId,
       }
     });
-
-    await this.productsRepository.update(findProduct, { inStock: dto.changeInStock});
-    await this.productsRepository.save(findProduct);
+    
+    await this.productsRepository.save({
+      id: dto.productId,
+      inStock: dto.changeInStock,
+    });
   }
 }

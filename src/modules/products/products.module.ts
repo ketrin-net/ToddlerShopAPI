@@ -12,6 +12,6 @@ import { Products } from './products.model';
   ],
   exports: [
     ProductsService,
-  ]
+  ],
 })
 export class ProductsModule {}
