@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Subcategory } from "src/subcategory/subcategory.model";
+import { Entity, PrimaryGeneratedColumn, Column, JoinTable, ManyToMany } from "typeorm"
 
 @Entity()
 export class Products {
@@ -25,4 +26,7 @@ export class Products {
 
   @Column({ type: "boolean"})
   inStock: boolean;
+
+  @ManyToMany(() => Subcategory, (subCategory) => subCategory.products)
+  subCategory: Subcategory[];
 }

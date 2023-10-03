@@ -6,6 +6,10 @@ import { ProductsModule } from "./modules/products/products.module";
 import { Users } from "./modules/users/users.model";
 import { UsersModule } from "./modules/users/users.module";
 import { AuthModule } from './modules/auth/auth.module';
+import { CategoryModule } from './modules/category/category.module';
+import { SubcategoryModule } from "./subcategory/subcategory.module";
+import { Category } from "./modules/category/category.model";
+import { Subcategory } from "./subcategory/subcategory.model";
 
 @Module({
   imports: [
@@ -19,11 +23,11 @@ import { AuthModule } from './modules/auth/auth.module';
       username: process.env.TYPEORM_USER,
       password: process.env.TYPEORM_PASSWORD,
       database: process.env.TYPEORM_DB,
-      entities: [Products, Users],
+      entities: [Products, Users, Category, Subcategory],
       autoLoadEntities: true,
       synchronize: true,
     }),
-    ProductsModule, UsersModule, AuthModule,
+    ProductsModule, UsersModule, AuthModule, CategoryModule, SubcategoryModule,
   ]
 })
 export class AppModule {}

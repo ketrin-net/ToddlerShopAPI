@@ -3,7 +3,6 @@ import { Products } from './products.model';
 import { CreateProductCardsDto } from './dto/create-product';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Not, Repository } from 'typeorm';
-import { ChangeInStockProductDto } from './dto/change-inStock-product';
 
 @Injectable()
 export class ProductsService {
@@ -24,6 +23,10 @@ export class ProductsService {
     return await this.productsRepository.find()
   }
 
+  async getProductById(productId: number): Promise<Products> {
+    return await this.productsRepository.findOne({ where: { id: productId } })
+  }
+
   async getAllProductsWithIconNew(): Promise<Products[]> {
     return await this.productsRepository.find({ where: { iconNew: true } })
   }
@@ -32,16 +35,23 @@ export class ProductsService {
     return await this.productsRepository.find({ where: { oldCost: Not(IsNull()) } });
   }
 
-  async changeInStock(dto: ChangeInStockProductDto) {
+  async changeInStock(productId: number ,subcategoryId: boolean) {
     const findProduct = await this.productsRepository.findOne({
       where: {
-        id: dto.productId,
+        id: productId,
       }
     });
     
     await this.productsRepository.save({
-      id: dto.productId,
-      inStock: dto.changeInStock,
+      id: productId,
+      inStock: subcategoryId,
     });
+  }
+
+  async getRandomProducts(): Promise<Products[]>{
+    return await this.productsRepository.createQueryBuilder()
+      .orderBy('RANDOM()')
+      .take(10)
+      .getMany();
   }
 }
